@@ -9,8 +9,10 @@ import personnages.Chef;
 import personnages.Gaulois;
 import villagegaulois.Village;
 
-class ControlVerifierIdentiteTest {
-	ControlVerifierIdentite cvi;
+
+class ControlTrouverEtalVendeurTest {
+
+	ControlTrouverEtalVendeur ctev;
 	Village village;
 	Chef chef;
 
@@ -20,22 +22,18 @@ class ControlVerifierIdentiteTest {
 		chef = new Chef("Chef", 1, village);
 		village.setChef(chef);
 
-		cvi = new ControlVerifierIdentite(village);
+		ctev = new ControlTrouverEtalVendeur(village);
 	}
-
 
 	@Test
-	void testVerifierIdentite() {
+	void testTrouverEtalVendeur() {
 		Gaulois gaulois1 = new Gaulois("Bonemine", 3);
-		
-		assertFalse(cvi.verifierIdentite("Bonemine"));
-		
 		village.ajouterHabitant(gaulois1);
-		
-		assertTrue(cvi.verifierIdentite("Bonemine"));
-		
-		assertTrue(cvi.verifierIdentite("Chef"));
-		
+		village.installerVendeur(gaulois1, "fleur", 5);
+		Gaulois gaulois2 = new Gaulois("Obelix", 3);
+		village.ajouterHabitant(gaulois2);
+		assertNull(ctev.trouverEtalVendeur("NonExistant"));
+		assertNotNull(ctev.trouverEtalVendeur("Bonemine"));
+		assertNull(ctev.trouverEtalVendeur("Obelix"));
 	}
-
 }

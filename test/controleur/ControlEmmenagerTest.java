@@ -9,42 +9,42 @@ import personnages.Chef;
 import personnages.Gaulois;
 import villagegaulois.Village;
 
+
+
+
 class ControlEmmenagerTest {
-	private Village village;
-	private Chef boss;
+	ControlEmmenager cm;
+	ControlAfficherVillage caff;
+	
 	@BeforeEach
-	void init() {
-		village = new Village("The Village", 10, 5);
-		boss = new Chef("Pavel", 9, village);
-		village.setChef(boss);
-		Gaulois boris = new Gaulois("Boris", 5);
-		Gaulois andrey = new Gaulois("Andrey", 2);
-		village.ajouterHabitant(andrey);
-		village.ajouterHabitant(boris);
+	void setUp() throws Exception {
+		Village village = new Village("Vi",10,10);
+		Chef chef = new Chef("Chef",1,village);
+		village.setChef(chef);
+		cm = new ControlEmmenager(village);
+		caff = new ControlAfficherVillage(village);
+		
+		
 	}
+
 	@Test
 	void testIsHabitant() {
-		ControlEmmenager control = new ControlEmmenager(village);
-		Gaulois misha = new Gaulois("Misha", 5);
-		assertTrue(control.isHabitant("Andrey"));
-		assertFalse(control.isHabitant("Misha"));
+		assertFalse(cm.isHabitant("Gaulois"));
+		cm.ajouterGaulois("Gaulois",3);
+		assertTrue(cm.isHabitant("Gaulois"));
 	}
 
 	@Test
 	void testAjouterDruide() {
-		ControlEmmenager control = new ControlEmmenager(village);
-		assertFalse(control.isHabitant("Misha"));
-		control.ajouterDruide("Misha", 5, 1, 7);
-		assertTrue(control.isHabitant("Misha"));
-	}
+		cm.ajouterDruide("Druide",2,1,5);
+		String[] villageois = caff.donnerNomsVillageois();
+		assertTrue(villageois[1].contains("Druide"));	}
 
 	@Test
 	void testAjouterGaulois() {
-		ControlEmmenager control = new ControlEmmenager(village);
-		assertFalse(control.isHabitant("Misha"));
-		control.ajouterGaulois("Misha", 5);
-		assertTrue(control.isHabitant("Misha"));
-		
+		cm.ajouterGaulois("Gaulois",3);
+		String[] villageois = caff.donnerNomsVillageois();
+		assertEquals(villageois[1], "Gaulois");
 	}
 
 }

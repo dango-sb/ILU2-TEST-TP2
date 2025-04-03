@@ -2,53 +2,54 @@ package controleur;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import personnages.Chef;
+import personnages.Druide;
 import personnages.Gaulois;
 import villagegaulois.Village;
 
 class ControlAfficherVillageTest {
-	private Village village;
-	private Chef boss;
+	ControlAfficherVillage cav;
+	Village village;
+	Chef chef;
+
 	@BeforeEach
-	void init() {
-		village = new Village("The Village", 10, 5);
-		boss = new Chef("Pavel", 9, village);
-		village.setChef(boss);
-		Gaulois boris = new Gaulois("Boris", 5);
-		Gaulois andrey = new Gaulois("Andrey", 2);
-		village.ajouterHabitant(andrey);
-		village.ajouterHabitant(boris);
+	void setUp() throws Exception {
+		village = new Village("Vi", 10, 10);
+		chef = new Chef("Chef", 1, village);
+		village.setChef(chef);
+		cav = new ControlAfficherVillage(village);
 	}
-	
+
 	@Test
 	void testDonnerNomsVillageois() {
-		ControlAfficherVillage control = new ControlAfficherVillage(village);
+		Gaulois gaulois1 = new Gaulois("Bonemine", 3);
+		village.ajouterHabitant(gaulois1);
+		Druide druide1 = new Druide("Obelix", 3, 0, 2);
+		village.ajouterHabitant(druide1);
+		String[] noms = {"Chef", "Bonemine", "le druide Obelix"};
+		for (int i = 0;i<3;i++) {
+			assertEquals(noms[i], cav.donnerNomsVillageois()[i]);
+		}
+		
+		Druide druide2 = new Druide("Aaron", 3, 0, 2);
+		village.ajouterHabitant(druide2);
+		
+		assertNotEquals(noms.length, cav.donnerNomsVillageois().length);
 
-		assertNotEquals(0, control.donnerNomsVillageois().length);
-		assertEquals(3, control.donnerNomsVillageois().length);
-		Gaulois kostya = new Gaulois("Kostya", 7);
-		village.ajouterHabitant(kostya);
-		assertEquals(4, control.donnerNomsVillageois().length);
 	}
 
 	@Test
 	void testDonnerNomVillage() {
-		ControlAfficherVillage control = new ControlAfficherVillage(village);
-		assertTrue("The Village"==control.donnerNomVillage());
+		assertEquals("Vi", cav.donnerNomVillage());
+		assertNotEquals("AbcdVille", cav.donnerNomVillage());
 	}
 
 	@Test
 	void testDonnerNbEtals() {
-		ControlAfficherVillage control = new ControlAfficherVillage(village);
-		Gaulois kostya = new Gaulois("Kostya", 7);
-		village.ajouterHabitant(kostya);
-		village.installerVendeur(kostya, "fleurs", 1);
-		assertEquals(5,control.donnerNbEtals());
-		
+		assertTrue(cav.donnerNbEtals()==10);
 	}
 
 }

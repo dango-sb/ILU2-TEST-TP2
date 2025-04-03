@@ -1,38 +1,52 @@
 package controleur;
 
+import personnages.Gaulois;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import personnages.Chef;
-import personnages.Gaulois;
 import villagegaulois.Village;
 
 class ControlPrendreEtalTest {
-	private Village village;
-	private Chef boss;
+	
+	ControlPrendreEtal cpe;
+	ControlVerifierIdentite cvi;
+	
 	@BeforeEach
-	void init() {
-		village = new Village("The Village", 10, 5);
-		boss = new Chef("Pavel", 9, village);
-		village.setChef(boss);
-		Gaulois boris = new Gaulois("Boris", 5);
-		village.ajouterHabitant(boris);
+	void setUp() throws Exception {
+		
+		Village village = new Village("Vi",10,2);
+		Chef chef = new Chef("Chef",1,village);
+		Gaulois gaulois1 = new Gaulois("Obelix", 5);
+		village.ajouterHabitant(gaulois1);
+		Gaulois gaulois2 = new Gaulois("Bonemine", 3);
+		village.setChef(chef);
+		cvi = new ControlVerifierIdentite(village);
+		cpe = new ControlPrendreEtal(cvi,village);
+		
 	}
+
 	@Test
 	void testResteEtals() {
-		fail("Not yet implemented");
+		assertTrue(cpe.resteEtals());
+		cpe.prendreEtal("Obelix", "fleur", 5);
+		cpe.prendreEtal("Obelix", "chaise", 3);
+		assertFalse(cpe.resteEtals());
 	}
 
 	@Test
 	void testPrendreEtal() {
-		fail("Not yet implemented");
+		int numeroEtal = cpe.prendreEtal("Obelix", "fleur", 5);
+		assertTrue(numeroEtal == 0); 
 	}
 
 	@Test
 	void testVerifierIdentite() {
-		fail("Not yet implemented");
+		assertFalse(cpe.verifierIdentite("Bonemine"));
+		assertTrue(cpe.verifierIdentite("Obelix"));
 	}
 
 }
