@@ -24,10 +24,12 @@ public class ControlAcheterProduit {
 		return village.rechercherVendeursProduit(nomProduit).length != 0;
 	}
 	
-	public void afficherVendeursProduit(String nomProduit) {
+	public String afficherVendeursProduit(String nomProduit) {
+		String listVendeurs="\n";
 		Gaulois[] vendeurs = village.rechercherVendeursProduit(nomProduit);
 		for(int i=0;i<vendeurs.length;i++)
-			System.out.println("- " + String.valueOf(i+1) + vendeurs[i]);
+			listVendeurs = listVendeurs + String.valueOf(i+1) + " - " + vendeurs[i].getNom() + "\n";
+		return listVendeurs;
 	}
 	
 	public Gaulois getVendeur(int idVendeur, String nomProduit) {
